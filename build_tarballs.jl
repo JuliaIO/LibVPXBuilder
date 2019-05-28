@@ -18,10 +18,43 @@ cd $WORKSPACE/srcdir/libvpx-1.8.0/
 sed -i 's/cp -p/cp/' build/make/Makefile
 mkdir libvpx-build
 cd libvpx-build
-CROSS=$target
-apk add diffutils
-apk add yasm
-../configure --prefix=$prefix --target=generic-gnu --enable-shared --disable-static
+apk add diffutils yasm
+
+export CONFIG_OPTS="--enable-shared --disable-static --as=yasm"
+export TARGET=generic-gnu
+if [[ "${target}" == i686-linux-* ]]; then
+    export CROSS=x86-linux-gcc
+elif [[ "${target}" == x86_64-linux-* ]]; then
+    export CROSS=x86_64-linux-gcc
+elif [[ "${target}" == arm-linux-* ]]; then
+    export CROSS=armv7-linux-gcc
+elif [[ "${target}" == powerpc64le-linux-* ]]; then
+    export CROSS=ppc64le-linux-gcc
+elif [[ "${target}" == x86_64-apple-* ]]; then
+    export CROSS=x86_64-darwin14-gcc
+    export CC=/opt/${target}/bin/${target}-gcc
+    export CXX=/opt/${target}/bin/${target}-g++
+    export LD=/opt/${target}/bin/${target}-ld
+    export TARGET=$CROSS
+elif [[ "${target}" == i686-w64-mingw32 ]]; then
+    export CROSS=x86-win32-gcc
+    export CONFIG_OPTS="--as=yasm"
+elif [[ "${target}" == x86_64-w64-mingw32 ]]; then
+    export CROSS=x86_64-win64-gcc
+    export CONFIG_OPTS="--as=yasm"
+elif [[ "${target}" == x86_64-unknown-* ]]; then
+    export CROSS=x86_64-unknown-gcc
+    export CC=/opt/${target}/bin/${target}-gcc
+    export CXX=/opt/${target}/bin/${target}-g++
+    export LD=/opt/${target}/bin/${target}-ld
+    export CONFIG_OPTS="--enable-shared --disable-static --as=yasm --disable-multithread"
+elif [[ "${target}" == aarch64-linux-* ]]; then
+    export CROSS=aarch64-linux-gcc
+else
+    export CROSS=$target
+fi
+
+../configure --prefix=$prefix --target=${TARGET} ${CONFIG_OPTS}
 echo "SRC_PATH_BARE=.." >> config.mk
 echo "target=libs" >> config.mk
 make -j${nproc}
@@ -41,7 +74,7 @@ platforms = [
     Linux(:aarch64, libc=:musl),
     Linux(:armv7l, libc=:musl, call_abi=:eabihf),
     # MacOS(:x86_64, compiler_abi=CompilerABI(:gcc4)),
-    # FreeBSD(:x86_64),
+    FreeBSD(:x86_64),
     Windows(:i686),
     Windows(:x86_64)
 ]
