@@ -22,9 +22,9 @@ if [[ "${target}" == *darwin* ]] || [[ "${target}" == *freebsd* ]]; then
     apk add gcc
     export CC=gcc
 fi
-CROSS=$target ../configure
 apk add diffutils
 apk add yasm
+export CROSS=$target
 ../configure --prefix=$prefix --target=generic-gnu --enable-shared --disable-static
 echo "SRC_PATH_BARE=.." >> config.mk
 echo "target=libs" >> config.mk
