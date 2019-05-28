@@ -25,7 +25,7 @@ fi
 apk add diffutils
 apk add yasm
 export CROSS=$target
-../configure --prefix=$prefix --target=generic-gnu --enable-shared --disable-static
+../configure --prefix=$prefix --target=generic-gnu --enable-shared --disable-static --as=yasm
 echo "SRC_PATH_BARE=.." >> config.mk
 echo "target=libs" >> config.mk
 make -j${nproc}
