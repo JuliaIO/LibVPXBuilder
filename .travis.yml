@@ -1,8 +1,8 @@
 language: julia
 os:
-  - linux
+- linux
 julia:
-  - 1.0
+- 1.0
 notifications:
   email: false
 git:
@@ -10,17 +10,22 @@ git:
 cache:
   timeout: 1000
   directories:
-    - downloads
+  - downloads
 env:
   global:
-    - BINARYBUILDER_DOWNLOADS_CACHE=downloads
-    - BINARYBUILDER_AUTOMATIC_APPLE=true
+  - BINARYBUILDER_DOWNLOADS_CACHE=downloads
+  - BINARYBUILDER_AUTOMATIC_APPLE=true
 sudo: required
-
-# Before anything else, get the latest versions of things
 before_script:
-  - julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
-
+- julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
 script:
-  - julia build_tarballs.jl
-
+- julia build_tarballs.jl
+deploy:
+  provider: releases
+  file_glob: true
+  file: products/*
+  skip_cleanup: true
+  on:
+    repo: JulaIO/LibVPXBuilder
+  api-key:
+    secure: JJFFkXymIteuvcpikTTqzqEKcswvtSpq7R7QMa0ZGiPiMF2Iwk2dJT17tZ6CHdBSNE5BoHVy7uJ8zqMY9eEHOiTCYK4D5Sv8dGSq7b8XWBeJAXZ7JUojJhq+XGGPEoGkwmppOKPtXsONth01vs6Qzq7j9w1mWToL4pNxBWVjSeSmD5SlrAA/m9rd3i8tCETj4Kd9NUTiGbZE1crxOA+c6ytfefie5fYJ8JSWEi7j+l96TiJKMTdndbCK3SMd1H18qab+jxRCjFPGsaWYMXVeZtDXGaqYGjSXD80FhCNw+hM38N9lVas9LiGsqdsp5M5rHmnXOdyD41ZNJ2vPODvZJcoTnNsg41Kl76uFE1Jk0aTzktJ1vU4YE444KBcopFa84iWsnUlGYybaHtvLWE2etNhUNCUu/QV6Pa5juboJOBXCU7i+DWfX77zqz8GP21hM+AGqFoVsSY7IwUEyNVGnmwJe5JCxuetfPqId3KaIihka3dvajV49UDYGs2Pw/+MDiL1FNuAQ0VXvOUq9i/cB2e1ufY1JKl7yzYYRU0R2o7x7rcE0BTLv2DhK5X6uB7lWlytCwqqS+x1eukRpMbLjGZLFt4Iv6PUcHLXDkTF0gr1G+v1bSzSPzPchxEyaqJWcfyJfY3dQo/kcVh1psSZQO0quCFKWaCLsvbh1iH1sQCo=
