@@ -49,7 +49,7 @@ elif [[ "${target}" == x86_64-w64-mingw32 ]]; then
 elif [[ "${target}" == x86_64-unknown-* ]]; then
     export CROSS=x86_64-unknown-gcc
     export CC=/opt/${target}/bin/${target}-gcc
-    export CXX=/opt/${target}/bin/${target}-g++
+    export CXX=/opt/${target}/bin/${target}-clang++
     export LD=/opt/${target}/bin/${target}-ld
     export CONFIG_OPTS="--enable-shared --disable-static --disable-multithread"
 elif [[ "${target}" == aarch64-linux-* ]]; then
