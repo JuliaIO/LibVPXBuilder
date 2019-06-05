@@ -34,9 +34,6 @@ elif [[ "${target}" == powerpc64le-linux-* ]]; then
     export CROSS=ppc64le-linux-gcc
 elif [[ "${target}" == x86_64-apple-* ]]; then
     export CROSS=x86_64-darwin14-gcc
-    export CC=/opt/${target}/bin/${target}-gcc
-    export CXX=/opt/${target}/bin/${target}-g++
-    export LD=/opt/${target}/bin/${target}-ld
     export TARGET=$CROSS
 elif [[ "${target}" == i686-w64-mingw32 ]]; then
     export CROSS=x86-win32-gcc
@@ -46,12 +43,10 @@ elif [[ "${target}" == x86_64-w64-mingw32 ]]; then
     export CROSS=x86_64-win64-gcc
     export CONFIG_OPTS=""
     export TARGET=$CROSS
-elif [[ "${target}" == x86_64-unknown-* ]]; then
+elif [[ "${target}" == *freebsd* ]]; then
     export CROSS=x86_64-unknown-gcc
-    export CC=/opt/${target}/bin/${target}-gcc
-    export CXX=/opt/${target}/bin/${target}-g++
-    export LD=/opt/${target}/bin/${target}-ld
     export CONFIG_OPTS="--enable-shared --disable-static --disable-multithread"
+    export TARGET=generic-gnu
 elif [[ "${target}" == aarch64-linux-* ]]; then
     export CROSS=aarch64-linux-gcc
 else
